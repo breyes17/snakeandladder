@@ -1,0 +1,154 @@
+// font-family: 'Shadows Into Light', cursive;
+// main color : #EB4D4D
+$primary-color: #EB4D4D;
+$white: #fff;
+$lgray: #768898;
+$dgray: #686868;
+$p1color: #00BEFE;
+$p2color: #ACFE2E;
+
+@mixin btnStyle {
+    border: 0;
+    color: $white;
+    font-size: 1.5em;
+    padding: 0;
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    margin: 20px auto;
+    background-color: $primary-color;
+    transition: background-color .2s ease-in;
+    &:hover{
+        color: $primary-color;
+        background-color: $white;
+    }  
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Shadows Into Light', cursive;
+    color: $dgray;
+}
+
+.main-container{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    // margin-top: 3vh;
+    position: absolute;
+    .table-container{
+        display: flex;
+        flex-direction: column-reverse;
+        .row{
+            display: flex;
+            justify-content: center;
+            &:nth-child(even){
+                display: flex;
+                flex-direction: row-reverse;
+            }
+            .cells{
+                width: 75px;
+                height: 75px;
+                font-size: 10px;
+                padding: 10px;
+                overflow: hidden;
+                &:nth-child(even){
+                    background-color: $primary-color;
+                    h1{
+                        color: $white;
+                    }
+                }
+                h1{
+                    font-size: 14px;
+                    letter-spacing: 1px;
+                }
+            }
+            .cells.p1{
+                background-color: $p1color; // Player 1 color
+            }
+            .cells.p2{
+                background-color: $p2color; // Player 2 color
+            }
+        }
+    } //end of table-container
+
+    .player-container{
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        padding: 0 40px;
+        line-height: 50px;
+        width: 500px;
+        h3{
+            .score-1 , .score-2{
+                padding-right: 50px;
+            }
+            .score-1.active{
+                border-right: 3px solid $p1color;
+            }
+            .score-2.active{
+                border-right: 3px solid $p2color;   
+            }
+        }
+        // button
+        .btn{
+            @include btnStyle;
+        }
+
+        footer{
+            line-height: 25px;
+            h3{
+                // font-size: 10px;
+                // color: red;
+            }
+            h2{
+                font-size: 1em;
+                color: lighten($color: ($dgray), $amount: 20)
+            }
+
+        }
+
+        // image
+        img{
+            width:  50%;
+            margin: 50px auto;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+        }
+    }
+}
+
+// popup container
+.popup-container{
+    position: absolute;
+    z-index: 99;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.75);
+    .popup-body{
+        width: 500px;
+        height: 300px;
+        display: flex;
+        border-radius: 15px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-color: $white;
+        h1, h3{
+            font-size: 2.5em;
+            .won{
+                color: $primary-color;
+            }
+        }
+        .ngame{
+            @include btnStyle;
+        }
+    }
+}
+
