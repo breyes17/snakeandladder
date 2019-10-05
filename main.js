@@ -50,7 +50,9 @@ let view = (function(){
         popNgame : '.ngame',
         year : '.cyear',
         win : '.winner',
-        cells : '.cells'
+        cells : '.cells',
+        vers : '.vers',
+        subvers : '.subvers'
     }
     return{
         dom : function(){
@@ -124,6 +126,11 @@ let view = (function(){
         showWinner: function(n){
             document.querySelector(domStrings.popCont).style.display = 'flex';
             document.querySelector(domStrings.win).textContent = n;
+        },
+        vers: function(v,s){
+            // let ver = 1, subvers = 1;
+            document.querySelector(domStrings.vers).textContent = v;
+            document.querySelector(domStrings.subvers).textContent = s;
         }
     }
 })();
@@ -131,9 +138,10 @@ let view = (function(){
 let controller = (function(d,v){
 
     let setupEvent = function(){
-        document.querySelector(v.dom().btn).addEventListener('click',()=>{
-            let txt = document.querySelector(v.dom().btn).textContent;
-
+        let btn = document.querySelector(v.dom().btn)
+        btn.addEventListener('click',()=>{
+            let txt = btn.textContent;
+            btn.disabled = true; // disabled the button
             if(txt === v.dom().startGameTxt){
                 v.resetView();
             } else{
@@ -185,7 +193,9 @@ let controller = (function(d,v){
                     v.updateTable();
                     // init();
                 }
+                
             }
+            setTimeout(() => btn.disabled=false,2000); // enabled the button
         });
 
         document.querySelector(v.dom().popCont).addEventListener('click',(e)=>{
@@ -207,9 +217,17 @@ let controller = (function(d,v){
             let obj = Object.entries(d.jumpCell());
             v.updateCell(obj);
             setupEvent();
+            v.vers(1,'01');
         }
     }
 })(data,view);  
 // move up 1:38,4:14,9:31:21:42,28:84,36:44,51:67,71:91,80:100
 // move down 16:6,47:26,49:11,56:53,62:19,64:60,87:24,93:73,95:75,98:78
 controller.init()
+
+/*
+Version
+v1.01 = Add disabling/enabling the button
+        Make the font family online
+        increase the width of cell from 75 to 85px / decrease height of cell from 75px to 70px
+*/
