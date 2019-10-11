@@ -63,7 +63,7 @@ let view = (function(){
             document.querySelector(domStrings.btn).textContent = domStrings.startGameTxt;
             document.querySelector(domStrings.img).style.display = 'none';
             let dom = document.querySelectorAll(`${domStrings.p1score},${domStrings.p2score}`);
-            Array.from(dom).forEach((x) => {
+            Array.from(dom).forEach(x => {
                 if(x.className.includes('active')){
                     x.classList.remove('active'); 
                 }
@@ -86,7 +86,7 @@ let view = (function(){
             dom.alt = `dice-${n}`;
             setTimeout(()=>{
                 dom.style.display = 'none';
-            },1700);
+            },1500);
         },
         nextPlayer : function(){
             let curPlayer = activePlayer === 1 ? 2 : 1;
@@ -119,32 +119,41 @@ let view = (function(){
         updateCell : function(obj){
             let o = Object.entries(obj);
             o.forEach(x=>{
-                // console.log(x[1]);
-                let cell = document.querySelector(`.cell-${x[1][0]}`).firstChild.textContent = `${x[1][0]} (Move to ${x[1][1]})`;
+                document.querySelector(`.cell-${x[1][0]}`).firstChild.textContent = `${x[1][0]} (Move to ${x[1][1]})`;
             })
         },
         showWinner: function(n){
             document.querySelector(domStrings.popCont).style.display = 'flex';
             document.querySelector(domStrings.win).textContent = n;
         },
-        vers: function(v,s){
+        vers: function(v){
             // let ver = 1, subvers = 1;
             document.querySelector(domStrings.vers).textContent = v;
-            document.querySelector(domStrings.subvers).textContent = s;
+            // document.querySelector(domStrings.subvers).textContent = s;
         }
     }
 })();
 
 let controller = (function(d,v){
 
+    const win = () => {
+        v.showWinner(activePlayer);
+        setTimeout(() => {
+            v.initView();
+            d.resetData();
+            v.updateTable();
+        },2000);
+    }
+
+
     let setupEvent = function(){
         let btn = document.querySelector(v.dom().btn)
         btn.addEventListener('click',()=>{
             let txt = btn.textContent;
-            btn.disabled = true; // disabled the button
             if(txt === v.dom().startGameTxt){
                 v.resetView();
             } else{
+                btn.disabled = true; // disabled the button
                 console.log('the game is starting');   
                 let dice = v.dice();
                 let p = `p${activePlayer}`;
@@ -170,11 +179,7 @@ let controller = (function(d,v){
                             v.updateTable(activePlayer, newScore);
                             if(d.Player()[p] === 100){
                                 console.log('we have a winner! <in if else>');
-                                v.showWinner(activePlayer);
-                                v.initView();
-                                d.resetData();
-                                v.updateTable();
-                                // init();
+                                win();
                             } else {
                                 v.nextPlayer();
                             }
@@ -187,20 +192,16 @@ let controller = (function(d,v){
                     }
                 } else {
                     console.log('we have a winner!');
-                    v.showWinner(activePlayer);
-                    v.initView();
-                    d.resetData();
-                    v.updateTable();
-                    // init();
+                    win();
                 }
                 
             }
             setTimeout(() => btn.disabled=false,2000); // enabled the button
         });
 
-        document.querySelector(v.dom().popCont).addEventListener('click',(e)=>{
+        document.querySelector(v.dom().popCont).addEventListener('click', e =>{
             console.log(e.target.className);
-            if(e.target.className !== v.dom().popBody){
+            if(`.${e.target.className}` !== v.dom().popBody){
                 document.querySelector(v.dom().popCont).style.display = 'none';
             }
         })
@@ -217,7 +218,7 @@ let controller = (function(d,v){
             let obj = Object.entries(d.jumpCell());
             v.updateCell(obj);
             setupEvent();
-            v.vers(1,'01');
+            v.vers('1.0.2');
         }
     }
 })(data,view);  
@@ -227,7 +228,11 @@ controller.init()
 
 /*
 Version
-v1.01 = Add disabling/enabling the button
+v1.0.1 = Add disabling/enabling the button
         Make the font family online
         increase the width of cell from 75 to 85px / decrease height of cell from 75px to 70px
+
+v.1.0.2 = Optimize the disabling / enabling the button
+        Add delay for about 2 seconds when there is a winner
+        update the vers function to accept only 1 argument
 */
